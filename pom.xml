@@ -31,8 +31,14 @@
             <artifactId>javax.faces</artifactId>
             <version>2.2.20</version>
         </dependency>
-                
-        <!-- JAVA DEPENDENCY FOR DEPENDENCY INJECTION LIKE @Inject @PostConstruct etc annotation --> 
+                       
+        <!-- https://mvnrepository.com/artifact/org.json/json -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20240303</version>
+        </dependency>
+        
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>

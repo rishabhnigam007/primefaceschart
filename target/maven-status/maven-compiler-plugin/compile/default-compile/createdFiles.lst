@@ -1,3 +1,4 @@
 com\chart\primefaceschart\DonutChart.class
 com\chart\primefaceschart\LineChart.class
 com\chart\primefaceschart\BarChart.class
+com\chart\primefaceschart\TemperatureMonitor.class

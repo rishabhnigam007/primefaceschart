@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"      
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Line Chart</title>       
+    </h:head>
+    <h:body>
+        <h:form>
+            <p:outputLabel for="city" value="Enter City Name : "/>
+            <p:inputText id="city" value="#{temperatureMonitorBean.cityName}" required="true"/>
+            <p:commandButton value="Fetch Data" action="#{temperatureMonitorBean.fetchTemperatureData}" update="chart"/>
+        </h:form>
+        <center>
+            <h1>Temperature Monitor Bar Chart</h1>
+        </center>
+        <div class="card">
+            <p:barChart id="chart" model="#{temperatureMonitorBean.barModel}" style="width: 100%; height: 700px;" rendered="#{not empty temperatureMonitorBean.barModel}" />
+        </div>
+    </h:body>
+</html>
