@@ -6,7 +6,10 @@ import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -78,80 +81,87 @@ public class TemperatureMonitor implements Serializable {
     }
 
     public void createBarModel(double[] temperatures) {
-    barModel = new BarChartModel();
-    ChartData data = new ChartData();
+        barModel = new BarChartModel();
+        ChartData data = new ChartData();
 
-    BarChartDataSet barDataSet = new BarChartDataSet();
-    barDataSet.setLabel("Temperature");
+        BarChartDataSet barDataSet = new BarChartDataSet();
+        barDataSet.setLabel("Temperature in " + '\u00B0' + "C");
 
-    List<Number> values = new ArrayList<>();
-    for (double temperature : temperatures) {
-        values.add(temperature);
+        List<Number> values = new ArrayList<>();
+        for (double temperature : temperatures) {
+            values.add(temperature);
+        }
+        barDataSet.setData(values);
+
+        // Set background and border colors for the bars
+        List<String> bgColor = new ArrayList<>();
+        bgColor.add("rgba(255, 99, 132, 0.2)");
+        bgColor.add("rgba(255, 159, 64, 0.2)");
+        bgColor.add("rgba(255, 205, 86, 0.2)");
+        bgColor.add("rgba(75, 192, 192, 0.2)");
+        bgColor.add("rgba(54, 162, 235, 0.2)");
+        barDataSet.setBackgroundColor(bgColor);
+
+        List<String> borderColor = new ArrayList<>();
+        borderColor.add("rgb(255, 99, 132)");
+        borderColor.add("rgb(255, 159, 64)");
+        borderColor.add("rgb(255, 205, 86)");
+        borderColor.add("rgb(75, 192, 192)");
+        borderColor.add("rgb(54, 162, 235)");
+        barDataSet.setBorderColor(borderColor);
+        barDataSet.setBorderWidth(1);
+
+        data.addChartDataSet(barDataSet);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        Date currentDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+
+        // Set labels for the bars
+        List<String> labels = new ArrayList<>();
+        for (int i = 0; i < temperatures.length; i++) {
+            String formattedDate = dateFormat.format(calendar.getTime());
+            labels.add(formattedDate);
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+        }
+        data.setLabels(labels);
+        barModel.setData(data);
+
+        // Configure chart options
+        BarChartOptions options = new BarChartOptions();
+        options.setMaintainAspectRatio(false);
+        CartesianScales cScales = new CartesianScales();
+        CartesianLinearAxes linearAxes = new CartesianLinearAxes();
+        linearAxes.setOffset(true);
+        linearAxes.setBeginAtZero(true);
+        CartesianLinearTicks ticks = new CartesianLinearTicks();
+        linearAxes.setTicks(ticks);
+        cScales.addYAxesData(linearAxes);
+        options.setScales(cScales);
+
+        Title title = new Title();
+        title.setDisplay(true);
+        title.setText("Temperature Forecast");
+        options.setTitle(title);
+
+        Legend legend = new Legend();
+        legend.setDisplay(true);
+        legend.setPosition("top");
+        LegendLabel legendLabels = new LegendLabel();
+        legendLabels.setFontStyle("italic");
+        legendLabels.setFontColor("#2980B9");
+        legendLabels.setFontSize(24);
+        legend.setLabels(legendLabels);
+        options.setLegend(legend);
+
+        // Disable animation
+        Animation animation = new Animation();
+        animation.setDuration(0);
+        options.setAnimation(animation);
+
+        barModel.setOptions(options);
     }
-    barDataSet.setData(values);
-
-    // Set background and border colors for the bars
-    List<String> bgColor = new ArrayList<>();
-    bgColor.add("rgba(255, 99, 132, 0.2)");
-    bgColor.add("rgba(255, 159, 64, 0.2)");
-    bgColor.add("rgba(255, 205, 86, 0.2)");
-    bgColor.add("rgba(75, 192, 192, 0.2)");
-    bgColor.add("rgba(54, 162, 235, 0.2)");
-    barDataSet.setBackgroundColor(bgColor);
-
-    List<String> borderColor = new ArrayList<>();
-    borderColor.add("rgb(255, 99, 132)");
-    borderColor.add("rgb(255, 159, 64)");
-    borderColor.add("rgb(255, 205, 86)");
-    borderColor.add("rgb(75, 192, 192)");
-    borderColor.add("rgb(54, 162, 235)");
-    barDataSet.setBorderColor(borderColor);
-    barDataSet.setBorderWidth(1);
-
-    data.addChartDataSet(barDataSet);
-
-    // Set labels for the bars
-    List<String> labels = new ArrayList<>();
-    for (int i = 0; i < temperatures.length; i++) {
-        labels.add("Day " + (i + 1));
-    }
-    data.setLabels(labels);
-    barModel.setData(data);
-
-    // Configure chart options
-    BarChartOptions options = new BarChartOptions();
-    options.setMaintainAspectRatio(false);
-    CartesianScales cScales = new CartesianScales();
-    CartesianLinearAxes linearAxes = new CartesianLinearAxes();
-    linearAxes.setOffset(true);
-    linearAxes.setBeginAtZero(true);
-    CartesianLinearTicks ticks = new CartesianLinearTicks();
-    linearAxes.setTicks(ticks);
-    cScales.addYAxesData(linearAxes);
-    options.setScales(cScales);
-
-    Title title = new Title();
-    title.setDisplay(true);
-    title.setText("Temperature Forecast");
-    options.setTitle(title);
-
-    Legend legend = new Legend();
-    legend.setDisplay(true);
-    legend.setPosition("top");
-    LegendLabel legendLabels = new LegendLabel();
-    legendLabels.setFontStyle("italic");
-    legendLabels.setFontColor("#2980B9");
-    legendLabels.setFontSize(24);
-    legend.setLabels(legendLabels);
-    options.setLegend(legend);
-
-    // Disable animation
-    Animation animation = new Animation();
-    animation.setDuration(0);
-    options.setAnimation(animation);
-
-    barModel.setOptions(options);
-}
 
     private String getWeatherData(String cityName) throws IOException {
         String apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + API_KEY;
