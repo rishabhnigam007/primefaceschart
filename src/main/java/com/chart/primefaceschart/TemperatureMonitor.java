@@ -13,7 +13,8 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+//import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.primefaces.model.charts.bar.BarChartModel;
@@ -29,11 +30,13 @@ import org.primefaces.model.charts.optionconfig.legend.LegendLabel;
 import org.primefaces.model.charts.optionconfig.title.Title;
 
 @ManagedBean(name = "temperatureMonitorBean")
-@RequestScoped
+@ViewScoped
 public class TemperatureMonitor implements Serializable {
 
     private BarChartModel barModel;
     private String cityName;
+    private double latitude;
+    private double longitude;
     private final String API_KEY = "9b5255153f1e0d4b0de53c1bae133728";
 
     public String getCityName() {
@@ -42,6 +45,22 @@ public class TemperatureMonitor implements Serializable {
 
     public void setCityName(String cityName) {
         this.cityName = cityName;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     @PostConstruct
@@ -62,9 +81,11 @@ public class TemperatureMonitor implements Serializable {
         try {
             // Fetch latitude and longitude
             String weatherJson = getWeatherData(cityName);
-            String[] latLong = getLatLongFromJson(weatherJson);
-            double latitude = Double.parseDouble(latLong[0]);
-            double longitude = Double.parseDouble(latLong[1]);
+            double[] latLong = getLatLongFromJson(weatherJson);
+            setLatitude(latLong[0]);
+            System.out.println("Latitude set: " + latitude);
+            setLongitude(latLong[1]);
+            System.out.println("Longitude set: " + longitude);
 
             // Fetch forecast data
             String forecastJson = getForecastData(latitude, longitude);
@@ -87,28 +108,45 @@ public class TemperatureMonitor implements Serializable {
         BarChartDataSet barDataSet = new BarChartDataSet();
         barDataSet.setLabel("Temperature in " + '\u00B0' + "C");
 
+        // Set background and border colors for the bars
+        List<String> bgColor = new ArrayList<>();
+
+        // Set border colors for the bars
+        List<String> borderColor = new ArrayList<>();
+
         List<Number> values = new ArrayList<>();
         for (double temperature : temperatures) {
+
+            if (temperature >= 36.0) {
+                // RED color if temperature greater than or equal to 36 degree Celsius
+                bgColor.add("rgba(255, 99, 132, 0.6)");
+                borderColor.add("rgb(255, 99, 132)");
+            } else if (temperature >= 30.0 && temperature < 36.0) {
+                // Orange color if temperature is between 30 and 35.9 degree Celsius
+                bgColor.add("rgba(255, 165, 0, 0.6)");
+                borderColor.add("rgb(255, 165, 0)");
+            } else if (temperature >= 25.0 && temperature < 30.0) {
+                // Yellow color if temperature is between 25 and 29.9 degree Celsius
+                bgColor.add("rgba(255, 205, 86, 0.6)");
+                borderColor.add("rgb(255, 205, 86)");
+            } else if (temperature >= 4.0 && temperature < 25.0) {
+                // Green color if temperature is between 4 and 24.9 degree Celsius
+                bgColor.add("rgba(75, 192, 192, 0.6)");
+                borderColor.add("rgb(75, 192, 192)");
+            } else {
+                // Blue color if temperature is less than 4 degree Celsius
+                bgColor.add("rgba(54, 162, 235, 0.6)");
+                borderColor.add("rgb(54, 162, 235)");
+            }
+
             values.add(temperature);
         }
         barDataSet.setData(values);
 
-        // Set background and border colors for the bars
-        List<String> bgColor = new ArrayList<>();
-        bgColor.add("rgba(255, 99, 132, 0.2)");
-        bgColor.add("rgba(255, 159, 64, 0.2)");
-        bgColor.add("rgba(255, 205, 86, 0.2)");
-        bgColor.add("rgba(75, 192, 192, 0.2)");
-        bgColor.add("rgba(54, 162, 235, 0.2)");
         barDataSet.setBackgroundColor(bgColor);
 
-        List<String> borderColor = new ArrayList<>();
-        borderColor.add("rgb(255, 99, 132)");
-        borderColor.add("rgb(255, 159, 64)");
-        borderColor.add("rgb(255, 205, 86)");
-        borderColor.add("rgb(75, 192, 192)");
-        borderColor.add("rgb(54, 162, 235)");
         barDataSet.setBorderColor(borderColor);
+
         barDataSet.setBorderWidth(1);
 
         data.addChartDataSet(barDataSet);
@@ -184,12 +222,12 @@ public class TemperatureMonitor implements Serializable {
         }
     }
 
-    private String[] getLatLongFromJson(String json) {
+    private double[] getLatLongFromJson(String json) {
         JSONObject obj = new JSONObject(json);
         JSONObject coord = obj.getJSONObject("coord");
         double latitude = coord.getDouble("lat");
         double longitude = coord.getDouble("lon");
-        return new String[]{String.valueOf(latitude), String.valueOf(longitude)};
+        return new double[]{latitude, longitude};
     }
 
     private String getForecastData(double latitude, double longitude) throws IOException {

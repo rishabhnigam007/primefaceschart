@@ -4,13 +4,50 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>Temperature Monitor</title>       
+        <title>Temperature Monitor</title>   
+        <style>
+            .form-container {
+                max-width: 100%;
+                margin: 0 auto;
+                padding: 20px;
+                background-color: #f8f9fa;
+                border-radius: 5px;
+            }
+
+            .form-group {
+                display: flex;
+                align-items: center;
+            }
+
+            .control-label {
+                margin-right: 15px;
+            }
+
+            .form-control {
+                flex-grow: 1;
+                padding: 10px;
+                border: 1px solid #ced4da;
+                border-radius: 4px;
+                font-size: 14px;
+            }
+        </style>
     </h:head>
     <h:body>
-        <h:form>
-            <p:outputLabel for="city" value="Enter City Name : "/>
-            <p:inputText id="city" value="#{temperatureMonitorBean.cityName}" required="true"/>
-            <p:commandButton value="Fetch Data" action="#{temperatureMonitorBean.fetchTemperatureData}" update="chartPanel"/>
+        <h:form styleClass="form-container">
+            <div class="form-group">
+                <div class="form-group">
+                    <p:outputLabel for="city" value="City: " styleClass="control-label"/>
+                    <p:inputText id="city" value="#{temperatureMonitorBean.cityName}" required="true" styleClass="form-control">
+                        <p:ajax event="change" listener="#{temperatureMonitorBean.fetchTemperatureData}" update="latitude longitude chartPanel"/>
+                    </p:inputText>
+                </div>
+                <p:spacer/><p:spacer/>
+                <p:outputLabel for="latitude" value="Latitude: " styleClass="control-label"/>
+                <h:outputText id="latitude" value="#{temperatureMonitorBean.latitude}" styleClass="form-control"/>
+                <p:spacer/><p:spacer/>
+                <p:outputLabel for="longitude" value="Longitude: " styleClass="control-label"/>
+                <h:outputText id="longitude" value="#{temperatureMonitorBean.longitude}" styleClass="form-control"/>
+            </div>            
         </h:form>
         <center>
             <h1>Temperature Monitor Bar Chart</h1>
