@@ -30,6 +30,19 @@
                 border-radius: 4px;
                 font-size: 14px;
             }
+            .container {
+                display: flex;
+                justify-content: space-between;
+                padding: 20px;
+            }
+
+            .content {
+                flex: 1;
+                margin: 10px;
+                padding: 20px;
+                border: 1px solid #ccc;
+                text-align: center;
+            }
         </style>
     </h:head>
     <h:body>
@@ -38,7 +51,7 @@
                 <div class="form-group">
                     <p:outputLabel for="city" value="City: " styleClass="control-label"/>
                     <p:inputText id="city" value="#{temperatureMonitorBean.cityName}" required="true" styleClass="form-control">
-                        <p:ajax event="change" listener="#{temperatureMonitorBean.fetchTemperatureData}" update="latitude longitude chartPanel"/>
+                        <p:ajax event="change" listener="#{temperatureMonitorBean.fetchTemperatureData}" update="latitude longitude chartPanel chartPanel1"/>
                     </p:inputText>
                 </div>
                 <p:spacer/><p:spacer/>
@@ -50,12 +63,21 @@
             </div>            
         </h:form>
         <center>
-            <h1>Temperature Monitor Bar Chart</h1>
+            <h1>Temperature Monitor Chart</h1>
         </center>
-        <div class="card">
-            <p:panel id="chartPanel">
-                <p:barChart id="chart" model="#{temperatureMonitorBean.barModel}" style="width: 100%; height: 500px;" rendered="#{not empty temperatureMonitorBean.barModel}" />
-            </p:panel>
+
+
+        <div class="container">
+            <div class="card content">
+                <p:panel id="chartPanel">
+                    <p:barChart id="chart" model="#{temperatureMonitorBean.barModel}" style="width: 100%; height: 500px;" rendered="#{not empty temperatureMonitorBean.barModel}" />
+                </p:panel>
+            </div>
+            <div class="card content">
+                <p:panel id="chartPanel1">
+                    <p:lineChart id="chart1" model="#{temperatureMonitorBean.lineModel}" style="width: 100%; height: 500px;" rendered="#{not empty temperatureMonitorBean.lineModel}" />
+                </p:panel>
+            </div>
         </div>
     </h:body>
 </html>

@@ -24,6 +24,9 @@ import org.primefaces.model.charts.ChartData;
 import org.primefaces.model.charts.axes.cartesian.CartesianScales;
 import org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearAxes;
 import org.primefaces.model.charts.axes.cartesian.linear.CartesianLinearTicks;
+import org.primefaces.model.charts.line.LineChartDataSet;
+import org.primefaces.model.charts.line.LineChartModel;
+import org.primefaces.model.charts.line.LineChartOptions;
 import org.primefaces.model.charts.optionconfig.animation.Animation;
 import org.primefaces.model.charts.optionconfig.legend.Legend;
 import org.primefaces.model.charts.optionconfig.legend.LegendLabel;
@@ -34,10 +37,19 @@ import org.primefaces.model.charts.optionconfig.title.Title;
 public class TemperatureMonitor implements Serializable {
 
     private BarChartModel barModel;
+    private LineChartModel lineModel;
     private String cityName;
     private double latitude;
     private double longitude;
     private final String API_KEY = "9b5255153f1e0d4b0de53c1bae133728";
+
+    public LineChartModel getLineModel() {
+        return lineModel;
+    }
+
+    public void setLineModel(LineChartModel lineModel) {
+        this.lineModel = lineModel;
+    }
 
     public String getCityName() {
         return cityName;
@@ -92,9 +104,11 @@ public class TemperatureMonitor implements Serializable {
 
             // Process forecast data to get temperatures for the next 5 days
             double[] temperatures = getTemperaturesFromForecast(forecastJson, 5);
+            double[] winds = getWindSpeedFromForecast(forecastJson, 5);
 
             // Create bar chart model with temperature data
             createBarModel(temperatures);
+            createLineModel(winds);
         } catch (IOException e) {
             e.printStackTrace();
             // Handle error: Failed to fetch data
@@ -201,6 +215,55 @@ public class TemperatureMonitor implements Serializable {
         barModel.setOptions(options);
     }
 
+    public void createLineModel(double[] windSpeeds) {
+        lineModel = new LineChartModel();
+        ChartData data = new ChartData();
+
+        LineChartDataSet lineDataSet = new LineChartDataSet();
+        lineDataSet.setLabel("Wind Speed in m/s");
+
+        List<Object> values = new ArrayList<>();
+        for (double windSpeed : windSpeeds) {
+            values.add(windSpeed);
+        }
+        lineDataSet.setData(values);
+        lineDataSet.setFill(false);
+        lineDataSet.setBorderColor("rgb(75, 192, 192)");
+        lineDataSet.setTension(0.1);
+        data.addChartDataSet(lineDataSet);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        Date currentDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+
+        // Set labels for the lines
+        List<String> labels = new ArrayList<>();
+        for (int i = 0; i < windSpeeds.length; i++) {
+            String formattedDate = dateFormat.format(calendar.getTime());
+            labels.add(formattedDate);
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+        }
+        data.setLabels(labels);
+//        lineModel.setData(data);
+
+        // Configure chart options
+        LineChartOptions options = new LineChartOptions();
+        options.setMaintainAspectRatio(false);
+        Title title = new Title();
+        title.setDisplay(true);
+        title.setText("Wind Speed Forecast");
+        options.setTitle(title);
+//
+//        Title subtitle = new Title();
+//        subtitle.setDisplay(true);
+//        subtitle.setText("Line Chart Subtitle");
+//        options.setSubtitle(subtitle);
+
+        lineModel.setOptions(options);
+        lineModel.setData(data);
+    }
+
     private String getWeatherData(String cityName) throws IOException {
         String apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + cityName + "&appid=" + API_KEY;
         URL url = new URL(apiUrl);
@@ -268,4 +331,23 @@ public class TemperatureMonitor implements Serializable {
         }
         return temperatures;
     }
+
+    private double[] getWindSpeedFromForecast(String forecastJson, int days) {
+        JSONObject obj = new JSONObject(forecastJson);
+        JSONArray list = obj.getJSONArray("list");
+        double[] windSpeeds = new double[days];
+        for (int i = 0; i < days; i++) {
+            int index = i * 8; // Assuming each day has 8 entries
+            if (index < list.length()) {
+                JSONObject dayData = list.getJSONObject(index);
+                JSONObject wind = dayData.getJSONObject("wind");
+                double windSpeed = wind.getDouble("speed");
+                windSpeeds[i] = windSpeed; // Wind speed in m/s
+            } else {
+                windSpeeds[i] = 0; // Default wind speed or any other value
+            }
+        }
+        return windSpeeds;
+    }
+
 }
