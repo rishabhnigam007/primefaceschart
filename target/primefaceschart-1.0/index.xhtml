@@ -4,23 +4,97 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>Line Chart</title>       
+        <title>Line Chart</title>
+        <style>
+
+            .container {
+                display: flex;
+                justify-content: space-between;
+                padding: 20px;
+            }
+
+            .content {
+                flex: 1;
+                margin: 10px;
+                padding: 20px;
+                border: 1px solid #ccc;
+                text-align: center;
+            }
+
+        </style>
     </h:head>
     <h:body>
-        <h1>Line Chart</h1>
-        <div class="card">
-            <p:lineChart model="#{lineChart.lineModel}" style="width: 100%; height: 200px;"/>
+        <div class="container">
+            <div class="card content">
+                <p:panel header="Vertical Bar Chart">
+                    <p:barChart model="#{barChart.barModel}" style="width: 100%; height: 300px;"/>
+                </p:panel>
+            </div>
+            <div class="card content">
+                <p:panel header="Horizontal Bar Chart">
+                    <p:barChart model="#{horizontalBarChart.hbarModel}" style="width: 100%; height: 300px;"/>
+                </p:panel>
+            </div>
+            <div class="card content">
+                <p:panel header="Stack Bar Chart">
+                    <p:barChart model="#{stackedBarChart.stackedBarModel}" style="width: 100%; height: 300px;"/>
+                </p:panel>
+            </div>
+            <div class="card content">
+                <p:panel header="Stacked Group Bar Chart">
+                    <p:barChart model="#{stackedGroupBarChart.stackedGroupBarModel}" style="width: 100%; height: 300px;"/>
+                </p:panel>
+            </div>
         </div>
-        <h1>Bar Chart</h1>
-        <div class="card">
-            <p:barChart model="#{barChart.barModel}" style="width: 100%; height: 200px;"/>
+        <div class="container">
+            <div class="card content">
+                <p:panel header="Donut Chart">
+                    <p:donutChart model="#{donutChart.donutModel}" style="width: 100%; height: 300px;"/>
+                </p:panel>
+            </div>
+            <div class="card content">
+                <p:panel header="Pie Chart">
+                    <p:pieChart model="#{pieChart.pieModel}" style="width: 100%; height: 300px;"/>
+                </p:panel>
+            </div>
+            <div class="card content">
+                <p:panel header="PolarArea Chart">
+                    <p:polarAreaChart model="#{polarAreaChart.polarAreaModel}" style="width: 100%; height: 300px;"/>
+                </p:panel>
+            </div>   
+            <div class="card content">
+                <p:panel header="Radar Chart">
+                    <p:radarChart model="#{radarChart.radarModel}" style="width: 100%; height: 300px;"/>
+                </p:panel>
+            </div>                                  
         </div>
-        <h1>Donut Chart</h1>
-        <div class="grid">
-            <div class="col-12 lg:col-6 xl:col-4">
-                <div class="card">
-                    <p:donutChart model="#{donutChart.donutModel}" style="width: 100%; height: 200px;"/>
-                </div>
+        <div class="container">
+            <div class="card content">
+                <p:panel header="Line Chart">
+                    <p:lineChart model="#{lineChart.lineModel}" style="width: 100%; height: 300px;"/>
+                </p:panel>
+            </div>  
+            <div class="card content">
+                <p:panel header="Cartisian Liner Chart">
+                    <p:lineChart model="#{cartesianLinerChart.cartesianLinerModel}" style="width: 100%; height: 300px;"/>
+                </p:panel>
+            </div> 
+            <div class="card content">
+                <p:panel header="Bubble Chart">
+                    <p:bubbleChart model="#{bubbleChart.bubbleChartModel}" style="width: 100%; height: 300px;"/>
+                </p:panel>
+            </div>
+            <div class="card content">
+                <p:panel header="Scatter Chart">
+                    <p:scatterChart model="#{scatterChart.scatterModel}" style="width: 100%; height: 300px;"/>
+                </p:panel>
+            </div>
+        </div>
+        <div class="container">
+            <div class="card content">
+                <p:panel header="Mixed Chart">
+                    <p:barChart model="#{mixedChart.mixedModel}" style="width: 100%; height: 300px"/>
+                </p:panel>
             </div>
         </div>
     </h:body>

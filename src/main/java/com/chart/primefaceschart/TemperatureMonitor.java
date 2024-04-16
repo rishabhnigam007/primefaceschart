@@ -133,23 +133,23 @@ public class TemperatureMonitor implements Serializable {
 
             if (temperature >= 36.0) {
                 // RED color if temperature greater than or equal to 36 degree Celsius
-                bgColor.add("rgba(255, 99, 132, 0.6)");
+                bgColor.add("rgba(255, 99, 132, 0.3)");
                 borderColor.add("rgb(255, 99, 132)");
             } else if (temperature >= 30.0 && temperature < 36.0) {
                 // Orange color if temperature is between 30 and 35.9 degree Celsius
-                bgColor.add("rgba(255, 165, 0, 0.6)");
+                bgColor.add("rgba(255, 165, 0, 0.3)");
                 borderColor.add("rgb(255, 165, 0)");
             } else if (temperature >= 25.0 && temperature < 30.0) {
-                // Yellow color if temperature is between 25 and 29.9 degree Celsius
-                bgColor.add("rgba(255, 205, 86, 0.6)");
-                borderColor.add("rgb(255, 205, 86)");
+                // Purple color if temperature is between 25 and 29.9 degree Celsius
+                bgColor.add("rgba(153,102,255, 0.3)");
+                borderColor.add("rgb(153,102,255)");
             } else if (temperature >= 4.0 && temperature < 25.0) {
                 // Green color if temperature is between 4 and 24.9 degree Celsius
-                bgColor.add("rgba(75, 192, 192, 0.6)");
+                bgColor.add("rgba(75, 192, 192, 0.3)");
                 borderColor.add("rgb(75, 192, 192)");
             } else {
                 // Blue color if temperature is less than 4 degree Celsius
-                bgColor.add("rgba(54, 162, 235, 0.6)");
+                bgColor.add("rgba(54, 162, 235, 0.3)");
                 borderColor.add("rgb(54, 162, 235)");
             }
 
@@ -228,7 +228,7 @@ public class TemperatureMonitor implements Serializable {
         }
         lineDataSet.setData(values);
         lineDataSet.setFill(false);
-        lineDataSet.setBorderColor("rgb(75, 192, 192)");
+        lineDataSet.setBorderColor("rgb(102,187,85)");
         lineDataSet.setTension(0.1);
         data.addChartDataSet(lineDataSet);
 

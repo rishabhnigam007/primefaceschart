@@ -51,7 +51,7 @@ public class LineChart implements Serializable {
         dataSet.setData(values);
         dataSet.setFill(false);
         dataSet.setLabel("My First Dataset");
-        dataSet.setBorderColor("rgb(75, 192, 192)");
+        dataSet.setBorderColor("rgb(102,187,85)");
         dataSet.setTension(0.1);
         data.addChartDataSet(dataSet);
 

@@ -1,4 +1,14 @@
-com\chart\primefaceschart\DonutChart.class
+com\chart\primefaceschart\MixedChart.class
+com\chart\primefaceschart\RadarChart.class
 com\chart\primefaceschart\LineChart.class
+com\chart\primefaceschart\StackedBarChart.class
+com\chart\primefaceschart\HorizontalBarChart.class
+com\chart\primefaceschart\StackedGroupBarChart.class
+com\chart\primefaceschart\DonutChart.class
+com\chart\primefaceschart\PieChart.class
+com\chart\primefaceschart\BubbleChart.class
 com\chart\primefaceschart\BarChart.class
+com\chart\primefaceschart\CartesianLinerChart.class
 com\chart\primefaceschart\TemperatureMonitor.class
+com\chart\primefaceschart\ScatterChart.class
+com\chart\primefaceschart\PolarAreaChart.class
