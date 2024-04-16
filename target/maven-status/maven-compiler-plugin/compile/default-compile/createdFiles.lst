@@ -9,6 +9,8 @@ com\chart\primefaceschart\PieChart.class
 com\chart\primefaceschart\BubbleChart.class
 com\chart\primefaceschart\BarChart.class
 com\chart\primefaceschart\CartesianLinerChart.class
+com\chart\primefaceschart\InteractiveChart.class
+com\chart\primefaceschart\ExportChart.class
 com\chart\primefaceschart\TemperatureMonitor.class
 com\chart\primefaceschart\ScatterChart.class
 com\chart\primefaceschart\PolarAreaChart.class
